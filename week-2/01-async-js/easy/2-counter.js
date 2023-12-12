@@ -4,7 +4,7 @@
 
 let i =0;
 let limit = 10;
-for(let j=0;j<limit;j++){
+for(var j=0;j<limit;j++){
     function solve(j){
         setTimeout(()=>{
             console.log(j);
@@ -12,73 +12,5 @@ for(let j=0;j<limit;j++){
     }
     solve(j)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // (Hint: setTimeout)
