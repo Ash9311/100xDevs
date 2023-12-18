@@ -5,7 +5,7 @@
 const fs = require('fs');
 
 function writeTotheFile(filePath,content){
-    fs.writeFile(filePath,content,'utf-8',(err)=>{
+    fs.writeFile(filePath,content,(err)=>{
         if(err){
             console.error(`error writing to the file: ${err.message}`);
             return;
@@ -15,6 +15,6 @@ function writeTotheFile(filePath,content){
 }
 
 let content = 'write content into the file';
-let filePath = 'C:/100xDevs/week-2/01-async-js/easy/2-counter.js;'
+let filePath = '../file.txt;'
 
 writeTotheFile(content,filePath);

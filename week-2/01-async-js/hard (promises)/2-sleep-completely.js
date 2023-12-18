@@ -3,6 +3,16 @@
  * During this time the thread should not be able to do anything else.
  */
 
-function sleep (seconds) {
-
+async function sleep(seconds) {
+    const wait = await soja(seconds);
+    console.log("waiting done -" + wait);
 }
+
+function soja(seconds) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve(`Finished waiting for ${seconds} seconds`) }, seconds * 1000);
+    }
+    );
+}
+
+sleep(5)
