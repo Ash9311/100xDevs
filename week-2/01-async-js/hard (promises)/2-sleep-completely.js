@@ -4,7 +4,7 @@
  */
 
 async function sleep(seconds) {
-    const wait = await soja(seconds);
+    const wait = await soja(seconds); //wait is a promise
     console.log("waiting done -" + wait);
 }
 
