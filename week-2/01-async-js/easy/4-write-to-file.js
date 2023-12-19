@@ -15,6 +15,6 @@ function writeTotheFile(filePath,content){
 }
 
 let content = 'write content into the file';
-let filePath = '../file.txt;'
+let filePath = 'C:/100xDevs/week-2/01-async-js/file.txt'
 
-writeTotheFile(content,filePath);
+writeTotheFile(filePath,content);
