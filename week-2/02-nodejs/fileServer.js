@@ -16,6 +16,32 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const app = express();
+const port = 3000;
 
+app.get('/files', (req, res) => {
+  fs.readdir(path.join(__dirname, './files/'), (err, files) => { //path.join concatenate these two path segments in a way that
+    // is appropriate for the operating system on which the code is running
+    if (err) {
+      return res.status(500).json({ error: 'Failed to retreive files' });
+    }
+    res.json(files);
+  })
+})
+
+app.get('/file/:filename', (req, res) => {
+  const filePath = path.join(__dirname, './files/', req.params.filename);
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) {
+      return res.status(404).send('File not found');
+    }
+    res.send(data);
+  });
+});
+
+app.get('*', (req, res) => {
+  res.status.send('Route not found')
+})
+
+app.listen(port, () => { console.log(`server listening on port ${port}`); })
 
 module.exports = app;
