@@ -11,17 +11,31 @@ const app = express();
 // You have been given a numberOfRequestsForUser object to start off with which
 // clears every one second
 
+
 let numberOfRequestsForUser = {};
 setInterval(() => {
-    numberOfRequestsForUser = {};
+  numberOfRequestsForUser = {};
 }, 1000)
 
-app.get('/user', function(req, res) {
+app.use(function (req, res, next) {
+  const userID = req.header["user-id"];
+  if (numberOfRequestsForUser[userID]) {
+    numberOfRequestsForUser[userID]++; //since its per 1 user 
+    if (numberOfRequestsForUser[userID] > 5) {
+      res.status(404).json({ msg: 'req limit exceeded' })
+    }
+  }
+  else {
+    numberOfRequestsForUser[userID] = 1;
+  }
+  next();
+})
+app.get('/user', function (req, res) {
   res.status(200).json({ name: 'john' });
 });
 
-app.post('/user', function(req, res) {
+app.post('/user', function (req, res) {
   res.status(200).json({ msg: 'created dummy user' });
 });
-
+app.listen(3000, () => console.log(`server started on PORT 3000`));
 module.exports = app;
