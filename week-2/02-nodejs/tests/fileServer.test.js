@@ -8,9 +8,9 @@ describe('API Endpoints', () => {
 
   beforeAll((done) => {
     if (globalServer) {
-        globalServer.close();
+      globalServer.close();
     }
-    globalServer = server.listen(3000);
+    globalServer = server.listen(3001);
     done()
   });
 
@@ -20,10 +20,10 @@ describe('API Endpoints', () => {
 
   describe('GET /files', () => {
     test('should return a list of files', async () => {
-        const options = {
-          method: 'GET',
-          path: '/files'
-        };
+      const options = {
+        method: 'GET',
+        path: '/files'
+      };
       const response = await sendRequest(options);
 
       expect(response.statusCode).toBe(200);
@@ -108,7 +108,7 @@ function sendRequest(options, requestBody) {
       {
         ...options,
         host: 'localhost',
-        port: 3000,
+        port: 3001,
       },
       (res) => {
         let body = '';
