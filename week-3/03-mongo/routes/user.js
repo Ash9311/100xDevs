@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const userMiddleware = require("../middleware/user");
-const { User } = require("../db");
+const { User, Course } = require("../db");
 
 const usernameExists = async (username) => {
     const foundUser = await User.findOne({ username });
@@ -14,11 +14,12 @@ router.post('/signup', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     if (await usernameExists(username)) {
-        res.status(403).json({ message: 'username already exists' })
+        res.status(403).json({ message: 'username already exists' });
+        return;
     }
     else {
         const user = new User({ username, password });
-        const savedUser = user.save();
+        const savedUser = await user.save();
         res.status(201).json({ message: 'User created successfully' })
     }
 });
@@ -31,7 +32,7 @@ router.get('/courses', async (req, res) => {
         return;
     }
     else {
-        return res.status(200).json({ 'courses': courses });
+        res.status(200).json({ 'courses': courses });
     }
 });
 
@@ -43,25 +44,45 @@ router.post('/courses/:courseId', userMiddleware, async (req, res) => {
         res.status(404).json({ message: `course ${courseId} not found` });
         return;
     }
-    const user = req.username;
-    if (user.purchasedCourses.includes(courseId)) {
-        return res.status(409).json({ message: "course already purchased" });
+    const username = req.headers.username;
+
+    try {
+        const user = await User.findOne({ username });
+        if (!user) {
+            res.status(404).json({ message: `User ${username} not found` });
+            return;
+        }
+        if (user.purchasedCourses && user.purchasedCourses.includes(courseId)) {
+            return res.status(409).json({ message: "course already purchased" });
+        }
+        const purchasedCourse = {
+            id: course.id,
+            title: course.title,
+            description: course.description,
+            price: course.price,
+            imageLink: course.imageLink
+        }
+        user.purchasedCourses.push(purchasedCourse);
+        const savedUser = await user.save();
+        res.status(201).json({ message: "Course purchased successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "server error" });
     }
-    const purchasedCourse = {
-        id: courseId, title: 'course title',
-        description: 'course description', price: 100,
-        imageLink: 'https://linktoimage.com', published: true
-    }
-    user.purchasedCourses.push(purchasedCourse);
-    return res.status(200).json({ message: "Course purhcased successfully" });
 
 });
 
-router.get('/purchasedCourses', userMiddleware, (req, res) => {
+router.get('/purchasedCourses', userMiddleware, async (req, res) => {
     // Implement fetching purchased courses logic
-    const user = req.username;
-    if (!user.purchasedCourses) {
-        return req.status(404).json({ message: "user has no course purchased" });
+    const username = req.headers.username;
+    const user = await User.findOne({ username });
+    if (!user) {
+        res.status(404).json({ message: `user ${username} not found` })
+        return;
     }
+    const purchasedCourses = user.purchasedCourses;
     return res.status(200).json({ 'purchasedCourses': user.purchasedCourses })
 });
+
+
+module.exports = router;

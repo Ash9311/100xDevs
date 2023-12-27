@@ -4,14 +4,19 @@ const { Admin } = require("../db");
 async function adminMiddleware(req, res, next) {
     // Implement admin auth logic
     // You need to check the headers and validate the admin from the admin DB. Check readme for the exact headers to be expected
-    const username = req.body.username;
-    const password = req.body.password;
+    const username = req.headers['username'];
+    const password = req.headers['password'];
     const admin = await Admin.findOne({ username, password });
     if (!admin) {
         res.status(403).json({ message: 'Invalid username/password' })
         return;
     }
-    next();
+    if (admin) {
+        next();
+    }
+
+
+
 
 }
 

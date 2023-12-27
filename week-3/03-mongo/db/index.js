@@ -13,7 +13,8 @@ const AdminSchema = new mongoose.Schema({
 const UserSchema = new mongoose.Schema({
     // Schema definition here
     username: String,
-    password: String
+    password: String,
+    purchasedCourses: [],
 });
 
 const CourseSchema = new mongoose.Schema({
@@ -21,7 +22,7 @@ const CourseSchema = new mongoose.Schema({
     title: String,
     description: String,
     price: Number,
-    image: String
+    imageLink: String
 });
 
 const Admin = mongoose.model('Admin', AdminSchema);
