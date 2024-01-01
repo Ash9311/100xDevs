@@ -9,7 +9,7 @@
 
     function addTodoToDom(todo) {
       const parentElement = document.createElement('div');
-      parentElement.setAttribute('id', todo.id.toString());
+      parentElement.setAttribute('id', todo.id);
       const titleElement = document.createElement('div');
       titleElement.innerHTML = todo.title;
       const descriptionElement = document.createElement('div');
@@ -29,32 +29,33 @@
 
     }
 
-    function updateState(newTodos) {
+    function updateState(newTodo) {
       // calculate the diff b/w newTodos and oldTodos.
       // More specifically, find out what todos are - 
       // 1. added
       // 2. deleted
       // 3. updated
-      const added = newTodos.filter(newTodo => !oldTodoState.some(oldTodo => oldTodo.id == newTodo.id));
-      const deleted = oldTodoState.filter(oldTodo => !newTodos.some(newtodo => newtodo == oldTodo));
-      const updated =
-        // calculate these 3 arrays
-        // call addTodo, removeTodo, updateTodo functions on each of the
-        // elements
-        added.map(element => addTodoToDom(element));
+      const added = newTodo.filter(newTodo => !oldTodoState.some(oldTodo => oldTodo.id == newTodo.id));
+      const deleted = oldTodoState.filter(oldTodo => !newTodo.some(newtodo => newtodo == oldTodo));
+      const updated = oldTodoState.filter(oldTodo => newTodo.find(newTodo => oldTodo.id == newTodo.id && (oldTodo.description != newTodo.description || oldTodo.title != newTodo.title)))
+      // calculate these 3 arrays in order to put the difference in the DOM
+      // call addTodo, removeTodo, updateTodo functions on each of the
+      // elements
+      added.map(element => addTodoToDom(element));
       deleted.forEach(element => removeTodoFromDom(element));
+
+
     }
 
     function addTodo() {
       const title = document.getElementById("title").value;
       const description = document.getElementById("description").value;
-      todoState.push({
+      const newTodo = [{
         title: title,
         description: description,
         id: globalId++,
-      })
-
-      updateState(todoState);
+      }]
+      updateState(newTodo);
     }
 
     function syncTodo() {
