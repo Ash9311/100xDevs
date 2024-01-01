@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-import { CONNECTION_STRING } from '../config.js'
+const { CONNECTION_STRING } = require('../config');
 // Connect to MongoDB
 mongoose.connect(CONNECTION_STRING);
 

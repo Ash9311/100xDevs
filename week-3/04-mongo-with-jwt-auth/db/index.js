@@ -1,7 +1,7 @@
+const { CONNECTION_STRING } = require('../config');
 const mongoose = require('mongoose');
-
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://admin:ashutosh@cluster0.unq1iah.mongodb.net/course-selling-2');
+mongoose.connect(CONNECTION_STRING);
 
 // Define schemas
 const AdminSchema = new mongoose.Schema({
