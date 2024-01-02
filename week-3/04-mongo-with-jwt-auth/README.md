@@ -18,7 +18,7 @@ You need to use mongodb to store all the data persistently.
   Output: { token: 'your-token' }
 - POST /admin/courses
   Description: Creates a new course.
-  Input: Headers: { 'Authorization': 'Bearer <your-token>' }, Body: { title: 'course title', description: 'course description', price: 100, imageLink: 'https://linktoimage.com' }
+  Input: Headers: { 'Authorization': 'Bearer <your-token>' }, Body: { title: 'course title', title: 'course description', price: 100, imageLink: 'https://linktoimage.com' }
   Output: { message: 'Course created successfully', courseId: "new course id" }
 - GET /admin/courses
   Description: Returns all the courses.
