@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import axios from "axios";
 import './App.css'
+import { Dashboard } from './components/Dashboard';
+import { Landing } from './components/Landing';
 
 // function App() {
 //   const [todos, setTodos] = useState([])
@@ -36,6 +39,9 @@ import './App.css'
 function App() {
   const [selectedId, setSelectedId] = useState([1]);
   return <div>
+    <div style={{ background: "black", color: 'white' }}>
+      Hi this is top bar
+    </div>
     <button onClick={function () {
       setSelectedId(1)
     }}>1</button>
@@ -52,7 +58,28 @@ function App() {
     <br />
     <hr />
     <App2></App2>
+
+    <BrowserRouter>
+      <Appbar />
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />}> </Route>
+        <Route path="/" element={<Landing />}> </Route>
+      </Routes>
+
+    </BrowserRouter>
   </div>
+}
+
+function Appbar() { //internal library of BrowserRouter is written such that it expects useNavigate declaration as a child
+  const navigate = useNavigate();
+  return (
+    <div>
+      {/* <button onClick={() => { window.location.href = "/" }}></button>
+  <button onClick={() => { window.location.href = "/dashboard" }}></button> */}
+      <button onClick={() => { navigate("/"); }}>Landing Page</button>
+      <button onClick={() => { navigate("/dashboard"); }}>Dashboard</button>
+    </div>
+  )
 }
 
 function App2() {
