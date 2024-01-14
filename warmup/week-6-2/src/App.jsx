@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import axios from "axios";
@@ -49,6 +49,39 @@ function App() {
       setSelectedId(4)
     }}>4</button>
     <Todo id={selectedId}></Todo>
+    <br />
+    <hr />
+    <App2></App2>
+  </div>
+}
+
+function App2() {
+  const [counter, setCounter] = useState(0);
+  const [inputValue, setInputValue] = useState(1);
+  const [finalValue, setFinalValue] = useState(0);
+
+  useEffect(() => {
+    let count = 0;
+    for (let i = 1; i <= inputValue; i++) {
+      count = count + i; //sum of all num till n
+    }
+    setFinalValue(count);
+  }, [inputValue]);
+
+  // let count = useMemo(() => { //little optimization
+  //   let count = 0;
+  //   for (let i = 1; i <= inputValue; i++) {
+  //     count = count + i; //sum of all num till n
+  //   }
+  //   return count;
+  // }, [inputValue]);
+
+  return <div>
+    <input onChange={function (e) { setInputValue(e.target.value) }} placeholder='Find sum from 1 to n' type="text" />
+    <br />
+    Sum from 1 to {inputValue} is {finalValue}
+    <br />
+    <button onClick={() => { setCounter(counter + 1) }}>Counter({counter})</button>
   </div>
 }
 
@@ -64,7 +97,7 @@ function Todo({ id }) {
   }, [id])
 
   return <div>
-    Id:{id}
+    Id:{todo.id}
 
     <h1>
       {todo.title}
