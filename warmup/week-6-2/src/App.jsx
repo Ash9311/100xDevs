@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import axios from "axios";
 import './App.css'
-import { Dashboard } from './components/Dashboard';
-import { Landing } from './components/Landing';
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const Landing = lazy(() => import('./components/Landing'));
 
 // function App() {
 //   const [todos, setTodos] = useState([])
@@ -62,8 +62,8 @@ function App() {
     <BrowserRouter>
       <Appbar />
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />}> </Route>
-        <Route path="/" element={<Landing />}> </Route>
+        <Route path="/dashboard" element={<Suspense fallback={"loading..."}><Dashboard /></Suspense>} />
+        <Route path="/" element={<Suspense fallback={"loading..."}><Landing /></Suspense>} />
       </Routes>
 
     </BrowserRouter>
