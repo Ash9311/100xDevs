@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState, Suspense, lazy } from 'react'
+import { useEffect, useMemo, useState, Suspense, lazy, useContext } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import axios from "axios";
 import './App.css'
+import { CountContext } from './context';
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Landing = lazy(() => import('./components/Landing'));
 
@@ -142,22 +143,33 @@ const Landing = lazy(() => import('./components/Landing'));
 
 function App() {
   const [count, setCount] = useState(0);
+  //wrap anyone that wants to use the teleported value inside a provider
   return (
     <div>
-      <Count count={count} setCount={setCount} />
-
+      <CountContext.Provider value={count}>
+        <Count setCount={setCount} />
+      </CountContext.Provider>
     </div>
   )
 }
 
 function Count({ count, setCount }) {
   return <div>
+    <CountRenderer />
     {count}
-    <Buttons count={count} setCount={setCount} />
+    <Buttons setCount={setCount} />
   </div>
 }
 
-function Buttons({ count, setCount }) {
+function CountRenderer() {
+  const count = useContext(CountContext); //this is like services in angular. can teleport values across components
+  return <div>
+    {count}
+  </div>
+}
+
+function Buttons({ setCount }) {
+  const count = useContext(CountContext);
   return (
     <div>
       <button onClick={() => { setCount(count + 1) }}>Increase</button>
