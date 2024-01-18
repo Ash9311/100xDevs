@@ -5,6 +5,8 @@ import viteLogo from '/vite.svg'
 import axios from "axios";
 import './App.css'
 import { CountContext } from './context';
+import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
+import { countAtom } from './store/atoms/count';
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Landing = lazy(() => import('./components/Landing'));
 
@@ -141,35 +143,73 @@ const Landing = lazy(() => import('./components/Landing'));
 
 //-------------------------------------------------------------------------- 
 
+// function App() {
+//   const [count, setCount] = useState(0);
+//   //wrap anyone that wants to use the teleported value inside a provider
+//   return (
+//     <div>
+//       <CountContext.Provider value={count}>
+//         <Count setCount={setCount} />
+//       </CountContext.Provider>
+//     </div>
+//   )
+// }
+
+// function Count({ count, setCount }) {
+//   return <div>
+//     <CountRenderer />
+//     {count}
+//     <Buttons setCount={setCount} />
+//   </div>
+// }
+
+// function CountRenderer() {
+//   const count = useContext(CountContext); //this is like services in angular. can teleport values across components
+//   return <div>
+//     {count}
+//   </div>
+// }
+
+// function Buttons({ setCount }) {
+//   const count = useContext(CountContext);
+//   return (
+//     <div>
+//       <button onClick={() => { setCount(count + 1) }}>Increase</button>
+//       <button onClick={() => { setCount(count - 1) }}>Decrease</button>
+
+//     </div>
+//   )
+// }
+
+// --------------------------------------------------------
 function App() {
-  const [count, setCount] = useState(0);
+
   //wrap anyone that wants to use the teleported value inside a provider
   return (
     <div>
-      <CountContext.Provider value={count}>
-        <Count setCount={setCount} />
-      </CountContext.Provider>
+      <RecoilRoot>
+      <Count />
+      </RecoilRoot>
     </div>
   )
 }
 
-function Count({ count, setCount }) {
+function Count() {
   return <div>
     <CountRenderer />
-    {count}
-    <Buttons setCount={setCount} />
+    <Buttons />
   </div>
 }
 
 function CountRenderer() {
-  const count = useContext(CountContext); //this is like services in angular. can teleport values across components
+  const count = useRecoilValue(countAtom);
   return <div>
     {count}
   </div>
 }
 
-function Buttons({ setCount }) {
-  const count = useContext(CountContext);
+function Buttons() {
+  const [count,setCount] = useRecoilState(countAtom); 
   return (
     <div>
       <button onClick={() => { setCount(count + 1) }}>Increase</button>
@@ -178,5 +218,6 @@ function Buttons({ setCount }) {
     </div>
   )
 }
+
 
 export default App;
