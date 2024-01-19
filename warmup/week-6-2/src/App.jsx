@@ -6,7 +6,7 @@ import axios from "axios";
 import './App.css'
 import { CountContext } from './context';
 import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
-import { countAtom } from './store/atoms/count';
+import { countAtom, evenSelector } from './store/atoms/count';
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Landing = lazy(() => import('./components/Landing'));
 
@@ -188,8 +188,9 @@ function App() {
   return (
     <div>
       <RecoilRoot>
-      <Count />
+        <Count />
       </RecoilRoot>
+      <BusinessCard/>
     </div>
   )
 }
@@ -205,11 +206,24 @@ function CountRenderer() {
   const count = useRecoilValue(countAtom);
   return <div>
     {count}
+    <EvenCountRenderer />
+  </div>
+}
+
+function EvenCountRenderer() {
+  //const  isEven = useRecoilValue(evenSelector); //one more way
+  const count = useRecoilValue(countAtom);
+  const isEven = useMemo(() => {
+    return count % 2 == 0
+  }, [count])
+
+  return <div>
+    {(isEven) ? "It is even" : null}
   </div>
 }
 
 function Buttons() {
-  const [count,setCount] = useRecoilState(countAtom); 
+  const [count, setCount] = useRecoilState(countAtom);
   return (
     <div>
       <button onClick={() => { setCount(count + 1) }}>Increase</button>
@@ -219,5 +233,16 @@ function Buttons() {
   )
 }
 
+function BusinessCard(){
+  return(
+    <div>
+
+    </div>
+  )
+}
+
+const styles = {
+  
+}
 
 export default App;
