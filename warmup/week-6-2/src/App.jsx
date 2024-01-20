@@ -190,7 +190,24 @@ function App() {
       <RecoilRoot>
         <Count />
       </RecoilRoot>
-      <BusinessCard/>
+      <BusinessCard />
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ backgroundColor: "red" }}>hi</div>
+        <div style={{ backgroundColor: "green" }}>hi</div>
+        <div style={{ backgroundColor: "blue" }}>hi</div>
+      </div>
+
+      <div className='grid grid-cols-3' style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}>
+        <div className='bg-red-500 col-span-4'>hi</div>
+        <div className='bg-red-500 col-span-4'>hi</div>
+        <div className='bg-blue-500 col-span-4'>hi</div>
+        <div className='bg-red-500 col-span-4'>hi</div>
+        <div className='bg-blue-500 col-span-4'>hi</div>
+
+      </div>
+      <div className='bg-red-500 md:bg-blue-500'>
+        yo
+      </div>
     </div>
   )
 }
@@ -233,8 +250,8 @@ function Buttons() {
   )
 }
 
-function BusinessCard(){
-  return(
+function BusinessCard() {
+  return (
     <div>
 
     </div>
@@ -242,7 +259,7 @@ function BusinessCard(){
 }
 
 const styles = {
-  
+
 }
 
 export default App;
