@@ -183,32 +183,22 @@ const Landing = lazy(() => import('./components/Landing'));
 
 // --------------------------------------------------------
 function App() {
+  const [render, setRender] = useState(true);
 
+  useEffect(() => {
+    setInterval(() => { setRender(!render) }, 9000)
+  }, [])
   //wrap anyone that wants to use the teleported value inside a provider
   return (
     <div>
       <RecoilRoot>
         <Count />
       </RecoilRoot>
-      <BusinessCard />
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div style={{ backgroundColor: "red" }}>hi</div>
-        <div style={{ backgroundColor: "green" }}>hi</div>
-        <div style={{ backgroundColor: "blue" }}>hi</div>
-      </div>
-
-      <div className='grid grid-cols-3' style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}>
-        <div className='bg-red-500 col-span-4'>hi</div>
-        <div className='bg-red-500 col-span-4'>hi</div>
-        <div className='bg-blue-500 col-span-4'>hi</div>
-        <div className='bg-red-500 col-span-4'>hi</div>
-        <div className='bg-blue-500 col-span-4'>hi</div>
-
-      </div>
-      <div className='bg-red-500 md:bg-blue-500'>
-        yo
+      <div>
+        {render ? <BusinessCard></BusinessCard> : <div></div>}
       </div>
     </div>
+
   )
 }
 
@@ -253,8 +243,25 @@ function Buttons() {
 function BusinessCard() {
   return (
     <div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ backgroundColor: "red" }}>hi</div>
+        <div style={{ backgroundColor: "green" }}>hi</div>
+        <div style={{ backgroundColor: "blue" }}>hi</div>
+      </div>
 
+      <div className='grid grid-cols-3' style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}>
+        <div className='bg-red-500 col-span-4'>hi</div>
+        <div className='bg-red-500 col-span-4'>hi</div>
+        <div className='bg-blue-500 col-span-4'>hi</div>
+        <div className='bg-red-500 col-span-4'>hi</div>
+        <div className='bg-blue-500 col-span-4'>hi</div>
+
+      </div>
+      <div className='bg-red-500 md:bg-blue-500'>
+        yo
+      </div>
     </div>
+
   )
 }
 
