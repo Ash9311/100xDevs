@@ -182,12 +182,66 @@ const Landing = lazy(() => import('./components/Landing'));
 // }
 
 // --------------------------------------------------------
+
+function useIsOnlines() {
+  const [isOnline, setIsOnline] = useState(window.navigator.onLine);
+  useEffect(() => {
+    window.addEventListener("online", () => {
+      setIsOnline(true);
+    })
+    window.addEventListener("offline", () => {
+      setIsOnline(false);
+    })
+  }, []);
+  return isOnline;
+}
+
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const timerId = setTimeout(() => { setDebouncedValue(value) }, delay);
+    return () => clearTimeout(timerId);
+  }, [value])
+  return debouncedValue;
+}
+
+function useInterval(fn, timeout) {
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fn();
+    }, timeout);
+    console.log("sup")
+    return () => {
+      clearInterval(intervalId) //for demounting
+    }
+  }
+    , [])
+}
+
 function App() {
   const [render, setRender] = useState(true);
+  const [posts, setPosts] = useState([]);
+  const [count, setcount] = useState(0);
+  const [inputValue, setInputValue] = useState('');
+  const debouncedValue = useDebounce(inputValue, 500);
 
+  useInterval(() => {
+    setcount(c => c + 1);
+  }, 1000);
+  const isOnline = useIsOnlines();
+  if (isOnline) {
+    console.log("u is online");
+  }
+  else {
+    console.log("u offline");
+  }
   useEffect(() => {
     setInterval(() => { setRender(!render) }, 9000)
+    axios.get("https://jsonplaceholder.typicode.com/posts").then(res => {
+      setPosts(res.data);
+    })
   }, [])
+
   //wrap anyone that wants to use the teleported value inside a provider
   return (
     <div>
@@ -197,9 +251,25 @@ function App() {
       <div>
         {render ? <BusinessCard></BusinessCard> : <div></div>}
       </div>
+      {posts.map(post => <Track post={post} />)}
+      <div>
+        Timer is at {count}
+        <br />
+        <input type='text' value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='Search...'></input>
+        <br />
+        debounced value is {debouncedValue}
+      </div>
     </div>
 
   )
+}
+
+function Track({ post }) {
+  return <div>
+    {post.title}
+    <br />
+    {post.description}
+  </div>
 }
 
 function Count() {
@@ -219,6 +289,7 @@ function CountRenderer() {
 
 function EvenCountRenderer() {
   //const  isEven = useRecoilValue(evenSelector); //one more way
+
   const count = useRecoilValue(countAtom);
   const isEven = useMemo(() => {
     return count % 2 == 0
