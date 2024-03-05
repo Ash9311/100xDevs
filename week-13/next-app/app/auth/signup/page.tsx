@@ -1,9 +1,11 @@
+import axios from "axios";
+import { ChangeEventHandler, useState } from "react";
+
+export function Signup() {
 
 
-export default function Signup() {
-    return (
-        <div>
-            Sign Up
-        </div>
-    );
+    return <div >
+        <Signup></Signup>
+    </div>
+
 }
