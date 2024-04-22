@@ -8,6 +8,7 @@ function useSocket() {
     const socket = new WebSocket('ws://localhost:8080');
     socket.onopen = () => {
       console.log('Connected');
+      socket.send('Hello Server!');
       setSocket(socket);
     }
     return () => {

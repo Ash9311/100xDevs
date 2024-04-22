@@ -30,12 +30,13 @@ const ws_1 = __importStar(require("ws"));
 const http_1 = __importDefault(require("http"));
 const server = http_1.default.createServer(function (request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
-    response.end("hi there");
+    response.send("hi there");
 });
 const wss = new ws_1.WebSocketServer({ server });
 wss.on('connection', function connection(ws) {
     ws.on('error', console.error);
     ws.on('message', function message(data) {
+        console.log(data);
         wss.clients.forEach(function each(client) {
             if (client.readyState === ws_1.default.OPEN) {
                 client.send(data);
