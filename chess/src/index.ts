@@ -1,10 +1,10 @@
-import { games } from "./store.js";
+import { GameManager } from "./store.js";
 import { startLogger } from "./logger.js"
 
+let gameManager =GameManager.getInstance();;
 startLogger();
-
 setInterval(() => {
-    games.push({
+    gameManager.addGame({
         id: Math.random().toString(),
         whitePlayerName: 'Alice',
         blackPlayerName: 'john',
