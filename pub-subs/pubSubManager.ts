@@ -19,8 +19,37 @@ export class PubSubManager {
         return PubSubManager.instance;
     }
 
-    public userSubscribe(userId:string, stock:string){
-        
+    public userSubscribe(userId: string, stock: string) {
+        if (!this.subscriptions.has(stock)) {
+            this.subscriptions.set(stock, []);
+        }
+        this.subscriptions.get(stock)?.push(userId);
+
+        if (this.subscriptions.get(stock)?.length) {
+            this.redisClient.subscribe(stock, (message) => {
+                this.handleMessage(stock, message);
+            });
+            console.log(`Subscribed to redis channel: ${stock}`);
+        }
+    }
+
+    public userUnSubscribe(userId: string, stock: string) {
+        this.subscriptions.set(stock, this.subscriptions.get(stock)?.filter((sub) => sub !== userId) || []);
+        if (this.subscriptions.get(stock)?.length === 0) {
+            this.redisClient.unsubscribe(stock);
+            console.log(`unSubscribed to Redis channel: ${stock}`);
+        }
+    }
+
+    private handleMessage(stock: string, message: string) {
+        console.log(`message received on channel ${stock}: ${message}`);
+        this.subscriptions.get(stock)?.forEach((sub) => {
+            console.log(`sending message to user: ${sub}`);
+        });
+    }
+
+    public async disconnect() {
+        await this.redisClient.quit();
     }
 }
 
