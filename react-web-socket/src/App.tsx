@@ -1,55 +1,27 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-function useSocket() {
-  const [socket, setSocket] = useState<null | WebSocket>(null)
-
-  useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8080');
-    socket.onopen = () => {
-      console.log('Connected');
-      socket.send('Hello Server!');
-      setSocket(socket);
-    }
-    return () => {
-      socket.close();
-    }
-  }, []);
-  return socket;
-}
-
-
 function App() {
-  const socket = useSocket();
+  const [socket, setSocket] = useState<WebSocket | null>(null);
 
-  const [latestMessage, setLatestMessage] = useState("");
-  const [message, setMessage] = useState("");
   useEffect(() => {
-    if(socket){
-    socket.onmessage = (message) => {
-      console.log('Received message:', message.data);
-      setLatestMessage(message.data);
+    const newSocket = new WebSocket('ws://localhost:8080');
+    newSocket.onopen = () => {
+      console.log('Connection established');
+      newSocket.send('Hello Server!');
     }
-  }
+    newSocket.onmessage = (message) => {
+      console.log('Message received:', message.data);
+    }
+    setSocket(newSocket);
+    return () => newSocket.close();
   }, [])
 
-if (!socket) {
   return (
-    <div>
-      Loading...
-    </div>
+    <>
+      hi there
+    </>
   )
-}
-
-return (
-  <>
-    <input onChange={(e) => { setMessage(e.target.value) }}></input>
-    <button onClick={() => { socket.send(message); }}>
-      Send
-    </button>
-    {latestMessage}
-  </>
-)
 }
 
 export default App

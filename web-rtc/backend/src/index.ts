@@ -7,7 +7,9 @@ let receiverSocket: null | WebSocket = null;
 
 wss.on('connection', function connection(ws) {
   ws.on('error', console.error);
-
+  setInterval(() => {
+    ws.send('Hello ,world!')
+  }, 1000)
   ws.on('message', function message(data: any) {
     const message = JSON.parse(data);
     if (message.type === 'sender') {
@@ -20,10 +22,10 @@ wss.on('connection', function connection(ws) {
       }
       receiverSocket?.send(JSON.stringify({ type: 'createOffer', sdp: message.sdp }));
     } else if (message.type === 'createAnswer') {
-        if (ws !== receiverSocket) {
-          return;
-        }
-        senderSocket?.send(JSON.stringify({ type: 'createAnswer', sdp: message.sdp }));
+      if (ws !== receiverSocket) {
+        return;
+      }
+      senderSocket?.send(JSON.stringify({ type: 'createAnswer', sdp: message.sdp }));
     } else if (message.type === 'iceCandidate') {
       if (ws === senderSocket) {
         receiverSocket?.send(JSON.stringify({ type: 'iceCandidate', candidate: message.candidate }));
