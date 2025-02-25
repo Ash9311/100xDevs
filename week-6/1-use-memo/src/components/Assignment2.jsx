@@ -19,18 +19,11 @@ for (let i = 0; i < TOTAL_LINES; i++) {
 export function Assignment2() {
     const [sentences, setSentences] = useState(ALL_WORDS);
     const [filter, setFilter] = useState("");
-
-    //const filteredSentences = sentences.filter(x => x.includes(filter))
     const filteredSentences = useMemo(() => {
-        return sentences.filter(x=>x.includes(filter))
-    }, [filter, sentences])
-
+        return sentences.filter(x => x.includes(filter));
+    }, [filter, sentences]);
     return <div>
-        <input type="text" onChange={(e) => {
-            setFilter(e.target.value)
-        }}></input>
-        {filteredSentences.map(word => <div>
-            {word}
-        </div>)}
+        <input type="text" onChange={(e) => { setFilter(e.target.value) }} />
+        {filteredSentences.map(word => <div>{word}</div>)}
     </div>
 }
